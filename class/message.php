@@ -1,8 +1,8 @@
 <?php
 class Message
 {
-    const MIN_USERNAME_LENGTH = 3;
-    const MIN_MESSAGE_LENGTH = 10;
+    public const MIN_USERNAME_LENGTH = 3;
+    public const MIN_MESSAGE_LENGTH = 10;
     private string $username;
     private string $message;
     private DateTime $date;
@@ -28,5 +28,15 @@ class Message
             $errors[] = "Le message doit contenir au moins 10 caractères";
         }
         return $errors;
+    }
+
+    // Convertir le message en JSON
+    public function toJSON(): string
+    {
+        return json_encode([
+            'username' => $this->username,
+            'message' => $this->message,
+            'date' => $this->date->getTimestamp()
+        ]);
     }
 }
