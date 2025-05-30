@@ -1,15 +1,18 @@
 <?php
 require_once "class/message.php";
+require_once "class/GuestBook.php";
+$errors = null;
 if (isset($_POST['username']) && isset($_POST['message'])) {
     $message = new Message($_POST['username'], $_POST['message']);
     if ($message->isValid()) {
-        # code...
+        $guestBook = new GuestBook(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'messages');
+        $guestBook->addMessage($message);
     } else {
         $errors = $message->getErrors();
     }
 }
 $title = 'GuestBook';
-require("layouts/header.php")
+require "layouts/header.php";
 ?>
 
 <div class="container">
