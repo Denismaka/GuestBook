@@ -15,6 +15,12 @@ class Message
     private string $message;
     private DateTime $date;
 
+    public static function fromJSON(string $json): Message
+    {
+        $data = json_decode($json, true);
+        return new Message($data['username'], $data['message'], new DateTime("@" . $data['date']));
+    }
+
     /**
      * Constructeur de la classe Message
      * @param string $username Nom de l'utilisateur
@@ -51,6 +57,20 @@ class Message
             $errors['message'] = "Le message doit contenir au moins 10 caractères";
         }
         return $errors;
+    }
+
+    public function toHtml(): string
+    {
+        $username = htmlentities($this->username);
+        $this->date->setTimezone(new DateTimeZone('Africa/Kinshasa'));
+        $date = $this->date->format('d/m/Y à H:i');
+        $message = nl2br(htmlentities($this->message));
+        return <<<HTML
+        <p>
+            <strong>{$username}</strong> <em>Le {$date}</em><br>
+            {$message}
+        </p>
+        HTML;
     }
 
     /**
